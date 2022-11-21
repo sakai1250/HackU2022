@@ -45,6 +45,19 @@ div#c1 {
         }
     }
 </script>
+<h1>To Do一覧</h1>
+<ul>
+    {% for topic in topics %}
+    <li><h3>
+        <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+    </h3></li>
+    <li>
+    {% empty %}
+    <li>
+        <h3>To Doはまだ作成されていません。</h3>
+    </li>
+    {% endfor %}
+</ul>
 <h3><a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic' %}" role="button">新規To Doを追加 &raquo;</a></h3>
 <body>
 <div class="jumbotron" id="a1">
@@ -77,17 +90,5 @@ div#c1 {
 {% endblock page_header %}
 
 {% block content %}
-<h1>To Do一覧</h1>
-<ul>
-    {% for topic in topics %}
-    <li><h3>
-        <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
-    </h3></li>
-    <li>
-    {% empty %}
-    <li>
-        <h3>To Doはまだ作成されていません。</h3>
-    </li>
-    {% endfor %}
-</ul>
+
 {% endblock content %}
