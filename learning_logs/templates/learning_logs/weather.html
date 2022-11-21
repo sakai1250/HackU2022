@@ -1,0 +1,36 @@
+{% extends 'learning_logs/base.html' %}
+{% block content %}
+<head>
+    <title>天気</title>
+</head>
+<body>
+<div class="column is-offset-4 is-4">               
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="field has-addons">
+            <button class="button is-info">
+                都市を追加
+            </button>
+        </div>
+    </form>
+<ul>
+{% for weather in weather_data %}
+<div class="card mb-3">
+    <h3 class="display-4">{{ weather.city_name }}</h3>
+<br>
+    <h3 class="display-4">{{ weather.temperature }}° C</h3>
+<br> {{ weather.description }}
+<figure class="image is-50x50">
+    <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
+</figure>
+<a href="{% url 'learning_logs:delete_city' weather.city.id %}" class='btn btn-danger btn-sm'>Delete</a>
+</div>
+{% empty %}
+<p>追加してください</p>
+{% endfor %}
+</ul>
+</div>
+</body>
+</html>
+{% endblock content %}

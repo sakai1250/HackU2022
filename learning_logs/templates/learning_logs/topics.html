@@ -48,9 +48,12 @@ div#c1 {
 <h3><a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic' %}" role="button">新規To Doを追加 &raquo;</a></h3>
 <body>
 <div class="jumbotron" id="a1">
-    <h3 class="display-4">今日の天気</h3>
-    <p class="lead">晴れ</p>
-    <a class="btn btn-lg btn-primary" href="{% url 'users:register' %}" role="button">詳細 &raquo;</a>
+    <h3 class="display-4">今日の天気 『{{ weather.city }}』</h3>
+    <figure class="image is-50x50">
+        <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
+    </figure>
+    <p class="lead">{{ weather.description }}</p>
+    <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:weather' %}" role="button">詳細 &raquo;</a>
 </div>
 <div class="jumbotron" id="b1">
     <h3 class="display-4">病気・ケガ</h3>

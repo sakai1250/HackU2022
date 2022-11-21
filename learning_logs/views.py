@@ -1,19 +1,39 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Topic, Entry
-from .forms import TopicForm,EntryForm
+from django.views.decorators.http import require_POST
+from .models import Topic, Entry, City
+from .forms import TopicForm,EntryForm,CityForm
 from django.http import Http404
-
+import requests, json
+url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&lang=ja&appid=74a6d08853913d2d377ebaf10a9a9056'
 def index(request):
     # 学習ノートのホームページ
     return render(request, 'learning_logs/index.html')
 
 @login_required
 def topics(request):
+    city_weather = []
     # 全てのトピックを表示
     topics = Topic.objects.filter(owner=request.user).order_by('date_added')
-    context = {'topics':topics}
-    return render(request, 'learning_logs/topics.html',context)
+    cities = City.objects.filter(my_city=request.user).order_by('date_added')
+    if not cities:
+        context = {'topics':topics}
+        return render(request, 'learning_logs/topics.html',context)
+    else:
+        city = cities[0]
+        city_weather = requests.get(url.format(city.name)).json()
+        if city_weather['cod'] == '404':
+            context = {'topics':topics}
+            return render(request, 'learning_logs/topics.html',context)
+        else:
+            weather = {
+                'city' : city_weather['name'],
+                'temperature' : city_weather['main']['temp'],
+                'description' : city_weather['weather'][0]['description'],
+                'icon' : city_weather['weather'][0]['icon']
+            }
+            context = {'topics':topics,'weather':weather,}
+            return render(request, 'learning_logs/topics.html',context)
 
 @login_required
 def topic(request, topic_id):
@@ -23,7 +43,7 @@ def topic(request, topic_id):
     if topic.owner != request.user:
         raise Http404
     entries = topic.entry_set.order_by('-date_added')
-    context = {'topic':topic, 'entries':entries}
+    context = {'topic':topic, 'entries':entries,}
     return render(request, 'learning_logs/topic.html',context)
 
 @login_required
@@ -88,3 +108,39 @@ def edit_entry(request, entry_id):
 @login_required
 def test(request):
     return render(request, 'learning_logs/test.html')
+
+@login_required
+def delete_city(request, city_id):
+    city = City.objects.get(pk=city_id)
+    city.delete()
+    return redirect('learning_logs:weather')
+
+@login_required
+def weather(request):
+    cities = City.objects.filter(my_city=request.user).order_by('name')
+    weather_data = []
+    weather = {}
+    if request.method != 'POST': 
+        form = CityForm()
+    else:
+        form = CityForm(request.POST)
+        if form.is_valid():
+            new_city = form.save(commit=False)
+            new_city.my_city = request.user
+            new_city.save()
+            return redirect('learning_logs:weather')
+        
+    form = CityForm()
+    
+    for city in cities:
+        city_weather = requests.get(url.format(city.name)).json() 
+        weather = {
+            'city' : city,
+            'city_name' : city_weather['name'],
+            'temperature' : city_weather['main']['temp'],
+            'description' : city_weather['weather'][0]['description'],
+            'icon' : city_weather['weather'][0]['icon'],
+        }
+        weather_data.append(weather)
+    context = {'weather':weather,'weather_data':weather_data,'form':form}
+    return render(request, 'learning_logs/weather.html', context)

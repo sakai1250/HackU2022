@@ -1,6 +1,6 @@
 from django import forms
-
-from .models import Topic, Entry
+from django.forms import ModelForm, TextInput
+from .models import Topic, Entry, City
 
 class TopicForm(forms.ModelForm):
     class Meta:
@@ -15,3 +15,8 @@ class EntryForm(forms.ModelForm):
         labels = {'text': ''}
         widgets = {'text':forms.Textarea(attrs={'cols':80})}
         
+class CityForm(forms.ModelForm):
+    class Meta:
+        model = City
+        fields = ['name']
+        widgets = {'name': TextInput(attrs={'class' : 'input', 'placeholder' : 'City Name'}),} 

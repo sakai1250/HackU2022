@@ -19,9 +19,19 @@ class Entry(models.Model):
     text = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)
     
-    class Meta:
-        verbose_name_plural = 'entries'
+class Meta:
+    verbose_name_plural = 'entries'
+    
+    def __str__(self):
+        # モデルの文字列表現を返す
+        return f"{self.text[:25]}..."
         
-        def __str__(self):
-            # モデルの文字列表現を返す
-            return f"{self.text[:25]}..."
+class City(models.Model):
+    name = models.CharField(max_length=25)
+    my_city = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    date_added = models.DateTimeField(auto_now_add=True, null=True)
+    
+    def __str__(self):
+        return self.name
+class Meta:
+    verbose_name_plural = 'cities'
