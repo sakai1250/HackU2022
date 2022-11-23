@@ -21,4 +21,6 @@ urlpatterns = [
     path('weather/',views.weather, name='weather'),
     
     path('delete_city/<city_id>/',views.delete_city, name='delete_city'),
+    
+    path('weather/<city_id>', views.setPlt, name='setPlt'),
 ]

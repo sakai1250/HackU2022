@@ -1,0 +1,68 @@
+{% extends 'learning_logs/base.html' %}
+{% block content %}
+<head>3日間の天気
+        縦軸が平均気温
+        横軸が○時間後
+</head>
+<body>
+<div class="column is-offset-4 is-4">               
+<ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js" type="text/javascript"></script>
+<div class="card mb-3">
+
+<script type="text/javascript">
+
+// ▼グラフの中身
+var lineChartData = {
+    labels : {{x}},
+    datasets : [
+        {
+            label: "平均気温",
+            fillColor : "rgba(0,0,0,0)", // 線から下端までを塗りつぶす色
+            strokeColor : "rgba(92,220,92,1)", // 折れ線の色
+            pointColor : "rgba(92,220,92,1)",  // ドットの塗りつぶし色
+            pointStrokeColor : "white",        // ドットの枠線色
+            pointHighlightFill : "yellow",     // マウスが載った際のドットの塗りつぶし色
+            pointHighlightStroke : "green",    // マウスが載った際のドットの枠線色
+            data : {{y}}      // 各点の値
+        },
+    ]
+    {% comment %} options: {
+        scales: {                          
+            xAxes: [                         
+                {
+                scaleLabel: {                
+                    display: true,           
+                    labelString: '時間後',    
+                    fontColor: "red",             
+                    fontSize: 16                  
+                },
+            }],
+            yAxes: [                        
+                {
+                scaleLabel: {                  
+                    display: true,                 
+                    labelString: '平均気温',     
+                    fontSize: 16                   
+                },
+            }]
+        }
+    }{% endcomment %}
+}
+// ▼上記のグラフを描画するための記述
+window.onload = function(){
+    var ctx = document.getElementById("graph-area").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartData);
+}
+</script>
+<canvas id="graph-area" height="500" width="1010">
+    ※表示にはcanvas要素を解釈可能なブラウザが必要です。
+</canvas>
+</ul>
+</div>
+{% for icon in weather_icon　%}
+<div style="float: left;"><img src="http://openweathermap.org/img/w/{{ icon }}.png" width="40" height="40"alt="Image"></div>
+{% endfor %}
+</body>
+</html>
+{% endblock content %}

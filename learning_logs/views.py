@@ -1,11 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
 from .models import Topic, Entry, City
 from .forms import TopicForm,EntryForm,CityForm
 from django.http import Http404
 import requests, json
-url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&lang=ja&appid=74a6d08853913d2d377ebaf10a9a9056'
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import io
+from .settings_secret import *
+
+url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
+url_5days = 'https://api.openweathermap.org/data/2.5/forecast?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
+
+
 def index(request):
     # 学習ノートのホームページ
     return render(request, 'learning_logs/index.html')
@@ -142,5 +150,22 @@ def weather(request):
             'icon' : city_weather['weather'][0]['icon'],
         }
         weather_data.append(weather)
+        
     context = {'weather':weather,'weather_data':weather_data,'form':form}
     return render(request, 'learning_logs/weather.html', context)
+
+@login_required
+def setPlt(request, city_id):
+    url = 'https://api.openweathermap.org/data/2.5/forecast?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
+    city = City.objects.get(pk=city_id)
+    weather_icon = []
+    x = [i*3 for i in range(0, 23)]
+    y = []
+    for city_num in range(0, 23):
+        city_weather = requests.get(url.format(city.name)).json() 
+                
+        y.append(city_weather["list"][city_num]["main"]["feels_like"])
+        weather_icon.append(city_weather["list"][city_num]["weather"][0]["icon"])
+        
+    context = {'weather_icon':weather_icon, 'x':x, 'y':y}
+    return render(request, 'learning_logs/weather_detail.html', context)
