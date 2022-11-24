@@ -8,7 +8,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
-from .settings_secret import *
+# from .settings_secret import * # render
 from .spotify import *
 
 url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
