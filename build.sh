@@ -2,7 +2,7 @@
 # exit on error
 set -o errexit
 
-pip install django-bootstrap4
+# pip install django-bootstrap4
 pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
