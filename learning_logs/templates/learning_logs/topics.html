@@ -102,7 +102,7 @@ div#e1 {
         {% for title, uri in zipmusic %}
         <li><nobr>
         <a>曲名『{{ title }}』</a>
-        URL: <a href="https://open.spotify.com/track/{{ u }}" >https://open.spotify.com/track/{{ uri }}</a>
+        URL: <a href="{{ uri }}" >{{ uri }}</a>
         </nobr></li>
         {% endfor %}
     </ol>

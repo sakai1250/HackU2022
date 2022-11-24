@@ -22,10 +22,11 @@ def get_spotify_ranking(client_id, client_secret):
 
     title = tracks_df['title'].to_list()
     uri = tracks_df['uri'].to_list()
-
+    for u in range(3,6):
+        uri[u] = 'https://open.spotify.com/track/' + uri[u]
     del title[:3]
     del uri[:3]
-        
+    print(uri)
     return title, uri
 
 
