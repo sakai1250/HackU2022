@@ -7,7 +7,7 @@ databases:
 
 services:
   - type: web
-    name: django_render
+    name: WEBEGINER
     env: python
     region: singapore
     buildCommand: './build.sh'
