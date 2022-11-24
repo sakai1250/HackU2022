@@ -1,4 +1,10 @@
 .DS_Store
-__pycache__
+*.log
+*.pyc
+__pycache__/
+db-volumes/
+db.sqlite3
 settings_secret.py
 .cache
+.vscode
+.env

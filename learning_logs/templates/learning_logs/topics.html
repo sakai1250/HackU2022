@@ -38,6 +38,15 @@ div#d1 {
     border: solid;
     border-radius: 8px;
 }
+div#e1 {
+    width: 800px;
+    height: 200px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+    border: solid;
+    border-radius: 8px;
+}
 </style>
 <script type="text/javascript">
     function draggable(target) {
@@ -87,7 +96,7 @@ div#d1 {
     <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:test' %}" role="button">テスト &raquo;</a>
 </div>
 <div class="jumbotron" id="d1">
-    <h3 class="display-4">Spotify 音楽 Top3</h3>
+    <h3>Spotify 音楽 Top3</h3>
     
     <ol>
         {% for title, uri in zipmusic %}
@@ -99,12 +108,16 @@ div#d1 {
     </ol>
 
 </div>
+<div class="jumbotron" id="e1">
+    <h3 class="display-4">レシピ作成</h3>
+    <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:make_recipe' %}" role="button">食材を入力 &raquo;</a>
+</div>
 <script type="text/javascript">
     draggable(document.getElementById('a1'));
     draggable(document.getElementById('b1'));
     draggable(document.getElementById('c1'));
     draggable(document.getElementById('d1'));
-
+    draggable(document.getElementById('e1'));
 </script>
 </body>
 </html>

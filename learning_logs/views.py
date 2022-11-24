@@ -174,3 +174,8 @@ def setPlt(request, city_id):
         
     context = {'weather_icon':weather_icon, 'x':x, 'y':y}
     return render(request, 'learning_logs/weather_detail.html', context)
+
+@login_required
+def make_recipe(request):
+    context = {}
+    return render(request, 'learning_logs/recipe.html', context)
