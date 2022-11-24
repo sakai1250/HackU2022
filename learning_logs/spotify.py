@@ -1,4 +1,3 @@
-# from settings_secret import client_id, client_secret
 import pandas as pd
 import spotipy
 import pandas as pd

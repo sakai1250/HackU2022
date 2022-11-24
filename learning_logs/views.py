@@ -7,9 +7,13 @@ import requests, json
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import io
+import os
 # from .settings_secret import * # render
 from .spotify import *
+
+client_id = os.getenv(client_id) # render
+client_secret = os.getenv(client_secret)
+OPENWEATHER_SECRET_KEY = os.getenv(OPENWEATHER_SECRET_KEY)
 
 url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
 url_5days = 'https://api.openweathermap.org/data/2.5/forecast?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
