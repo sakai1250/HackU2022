@@ -16,7 +16,6 @@ import environ
 from decouple import config
 from dj_database_url import parse as dburl
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
@@ -137,4 +136,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SUPERUSER_NAME = env("SUPERUSER_NAME")
 SUPERUSER_EMAIL = env("SUPERUSER_EMAIL")
 SUPERUSER_PASSWORD = env("SUPERUSER_PASSWORD")
-

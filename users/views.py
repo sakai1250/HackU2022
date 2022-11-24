@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 
 def register(request):
@@ -18,3 +18,7 @@ def register(request):
     # 空または無効のフォームを表示
     context = {'form':form}
     return render(request,'registration/register.html',context)
+
+def logout_user(request):
+    logout(request)
+    return redirect('learning_logs:index')

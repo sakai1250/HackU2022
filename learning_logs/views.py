@@ -4,15 +4,11 @@ from .models import Topic, Entry, City
 from .forms import TopicForm,EntryForm,CityForm
 from django.http import Http404
 import requests, json
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 from .spotify import *
 from .settings_secret import *
 
 url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
 url_5days = 'https://api.openweathermap.org/data/2.5/forecast?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
-
 
 
 def index(request):
