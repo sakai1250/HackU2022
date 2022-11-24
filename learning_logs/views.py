@@ -4,9 +4,6 @@ from .models import Topic, Entry, City
 from .forms import TopicForm,EntryForm,CityForm
 from django.http import Http404
 import requests, json
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 from .spotify import *
 from .settings_secret import *
 

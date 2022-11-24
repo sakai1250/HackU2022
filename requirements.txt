@@ -4,7 +4,6 @@ asgiref==3.5.2
 asttokens==2.1.0
 async-timeout==4.0.2
 backcall==0.2.0
-beautifulsoup4==4.11.1
 bootstrap4==0.1.0
 certifi==2020.6.20
 charset-normalizer==2.1.1
@@ -29,8 +28,6 @@ jupyter_client==7.4.7
 jupyter_core==5.0.0
 jupyterlab-widgets==3.0.3
 kiwisolver==1.4.4
-matplotlib==3.6.2
-matplotlib-inline==0.1.6
 mysqlclient==2.1.1
 nest-asyncio==1.5.6
 numpy==1.23.5
