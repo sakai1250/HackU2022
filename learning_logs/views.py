@@ -9,29 +9,36 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
 from .settings_secret import *
+from .spotify import *
 
 url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
 url_5days = 'https://api.openweathermap.org/data/2.5/forecast?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
 
 
 def index(request):
-    # 学習ノートのホームページ
     return render(request, 'learning_logs/index.html')
 
 @login_required
 def topics(request):
-    city_weather = []
-    # 全てのトピックを表示
+    # ホーム
     topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+    # openweather
+    city_weather = []
     cities = City.objects.filter(my_city=request.user).order_by('date_added')
+    # spotify
+    title = []
+    uri = []
+    title, uri = get_spotify_ranking(client_id, client_secret)
+    zipmusic = zip(title, uri)
+    
     if not cities:
-        context = {'topics':topics}
+        context = {'topics':topics, 'zipmusic':zipmusic}
         return render(request, 'learning_logs/topics.html',context)
     else:
         city = cities[0]
         city_weather = requests.get(url.format(city.name)).json()
         if city_weather['cod'] == '404':
-            context = {'topics':topics}
+            context = {'topics':topics, 'zipmusic':zipmusic}
             return render(request, 'learning_logs/topics.html',context)
         else:
             weather = {
@@ -40,14 +47,12 @@ def topics(request):
                 'description' : city_weather['weather'][0]['description'],
                 'icon' : city_weather['weather'][0]['icon']
             }
-            context = {'topics':topics,'weather':weather,}
+            context = {'topics':topics, 'weather':weather, 'zipmusic':zipmusic}
             return render(request, 'learning_logs/topics.html',context)
 
 @login_required
 def topic(request, topic_id):
-    # 全てのトピックを表示
     topic = Topic.objects.get(id=topic_id)
-    # トピックが現在のユーザーが所持するものであることを確認する
     if topic.owner != request.user:
         raise Http404
     entries = topic.entry_set.order_by('-date_added')
@@ -56,9 +61,9 @@ def topic(request, topic_id):
 
 @login_required
 def new_topic(request):
-    # 新規トピックを追加
+    # 
     if request.method != 'POST':
-        # データは送信していないので空のフォーム
+        # 
         form = TopicForm()
     else:
         # POSTでデータが送信されたのでこれを処理
@@ -74,7 +79,7 @@ def new_topic(request):
 
 @login_required
 def new_entry(request, topic_id):
-    # 特定のトピックに新規記事を追加
+    # 
     topic = Topic.objects.get(id=topic_id)
     
     if request.method != 'POST':
@@ -94,14 +99,14 @@ def new_entry(request, topic_id):
 
 @login_required
 def edit_entry(request, entry_id):
-    # 既存の記事を修正する
+    # 
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
     
     if topic.owner != request.user:
         raise Http404    
     if request.method != 'POST':
-        # 初回リクエスト時は現在の記事の内容がフォームに埋め込まれている
+        # 初回リクエスト時はがフォームに埋め込まれている
         form = EntryForm(instance=entry)
     else:
         # POSTでデータが送信されたのでこれを処理する
