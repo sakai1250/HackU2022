@@ -2,58 +2,99 @@
 {% block content %}
 <html>
 <head>
-<style type="text/css">
-div {
-width: 500px;
-height: 500px;
-position: relative;
+<meta charset="utf-8">
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<style>
+#sortable li{
+    list-style-type: none;
+    padding: 0px;
 }
-div.a {
-    background-color: blue;
-    top: 0px;
-    left: 0px;
+#sortable  {
+    margin: 10px 0px;
+    padding: 10px;
+    border: #999 5px solid;
 }
-    div.b {
-    background-color: red;
-    top: 500px;
-    left: 0px;
-}
-    div.c {
-    background-color: green;
-    top: 0px;
-    left: 500px;
+.handle{
+    color: #990;
+    padding: 10px;
 }
 </style>
-<script type="text/javascript">
-function draggable(target) {
-    target.onmousedown = function() {
-    document.onmousemove = mouseMove;
-    };
-    document.onmouseup = function() {
-    document.onmousemove = null;
-    };
-    function mouseMove(e) {
-    var event = e ? e : window.event;
-    target.style.top = parseInt(target.style.top||'0') + e.movementY + 'px';
-    target.style.left = parseInt(target.style.left||'0') + e.movementX + 'px';
-    }
-}
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="./jquery.ui.touch-punch.min.js"></script>
+<script>
+$(function() {
+    $('#sortable').sortable({
+        handle: 'i.handle',
+        axis: 'y'
+    });
+});
 </script>
 </head>
+<h1>To Do一覧</h1>
+    {% for topic in topics %}
+    <h3>
+        <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+    </h3>
+    {% empty %}
+    <h3>To Doはまだ作成されていません。</h3>
+    {% endfor %}
+<h3><a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic' %}" role="button">新規To Doを追加 &raquo;</a></h3>
 <body>
-<div class="b" id="b1"></div>
-<div class="c" id="c1"></div>
-<div class="jumbotron" id="a1">
-    <h3 class="display-4">To Do</h3>
-    {% comment %} <p class="lead"></p> {% endcomment %}
-    <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic' %}" role="button">追加 &raquo;</a>
-    <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:test' %}" role="button">テスト &raquo;</a>
+
+<div id="sortable">
+    <div class="jumbotron" type="hidden" name="display_order" value="0">
+        <h3 class="display-4">
+            <li><i class="handle fas fa-arrows-alt-v">
+            </i></li>
+            今日の天気 『{{ weather.city }}』
+            <figure class="image is-50x50">
+                <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
+            </figure>
+            <p class="lead">{{ weather.description }}
+            </p>
+        </h3>
+        <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:weather' %}" role="button">詳細 &raquo;</a>
+    </div>
+    <div class="jumbotron" type="hidden" name="display_order" value="1">
+        <h3 class="display-4">
+            <i class="handle fas fa-arrows-alt-v">
+            </i>病気・ケガ
+        </h3>
+        <a class="btn btn-lg btn-primary" href="{% url 'users:register' %}" role="button">診断 &raquo;</a>
+    </div>
+    <div class="jumbotron" type="hidden" name="display_order" value="2">
+        <h3 class="display-4">
+            <i class="handle fas fa-arrows-alt-v">
+            </i>To Do
+        </h3>
+        <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic' %}" role="button">追加 &raquo;</a>
+        <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:test' %}" role="button">テスト &raquo;</a>
+    </div>
+    <div class="jumbotron" type="hidden" name="display_order" value="3">
+        <h3><i class="handle fas fa-arrows-alt-v">
+        </i>Spotify 音楽 Top3
+        </h3>
+        <h4>
+            {% for title, uri in zipmusic %}
+            <li>
+                <nobr>
+                <a>曲名『{{ title }}』</a>URL: <a href="{{ uri }}" >{{ uri }}</a>
+                </nobr>
+            </li>
+            {% endfor %}
+        </h4>
+    </div>
+    <div class="jumbotron" type="hidden" name="display_order" value="4">
+        <h3 class="display-4">
+            <i class="handle fas fa-arrows-alt-v">
+            </i>レシピ作成
+        </h3>
+        <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:make_recipe' %}" role="button">食材を入力 &raquo;</a>
+    </div>
 </div>
-<script type="text/javascript">
-draggable(document.getElementById('a1'));
-draggable(document.getElementById('b1'));
-draggable(document.getElementById('c1'));
-</script>
+
 </body>
 </html>
 {% endblock content %}
