@@ -61,8 +61,8 @@ $(function() {
             </i>
             <nobr>
             <font size="8">『{{ weather.city }}』</font><font size="5">の現在</font>
+            {{ weather.description }}<img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image" width="200" height="200">
             </nobr>
-            {{ weather.description }}<img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
         </h3>
         <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:weather' %}" role="button">詳細 &raquo;</a>
     </div>
