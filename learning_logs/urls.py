@@ -18,7 +18,8 @@ urlpatterns = [
     
     path('test/',views.test, name='test'),
     
-    path('add_test/<order_id>',views.test, name='test'),   
+    path('ajax-number/', views.ajax_number, name='ajax_number'),
+    # path('add_test/<order_id>',views.add_test, name='add_test'),   
     
     path('weather/',views.weather, name='weather'),
     
@@ -26,5 +27,7 @@ urlpatterns = [
     
     path('weather/<city_id>', views.setPlt, name='setPlt'),
     
-    path('recipe/', views.make_recipe, name='make_recipe'),
+    path('recipe/', views.recipe_page, name='recipe_page'),
+    
+    path('make_recipe/', views.make_recipe, name='make_recipe'),
 ]

@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Topic, Entry, City, Order
-from .forms import TopicForm,EntryForm,CityForm
-from django.http import Http404
+from .forms import TopicForm, EntryForm, CityForm
+from django.http import Http404, JsonResponse
+from django.conf import settings
 import requests, json
 from .spotify import *
+from .recipe import *
 from .settings_secret import *
 
 url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&lang=ja&appid=' + OPENWEATHER_SECRET_KEY
@@ -119,12 +121,30 @@ def test(request):
     return render(request, 'learning_logs/test.html')
 
 @login_required
-def add_test(request, order_id):
-    print(request.POST)
-    order = Order.objects.get(id=order_id)
-    print(order)
-    print(request.POST)
-    return render(request, 'learning_logs/test.html', {'order':order})
+def ajax_number(request):
+    number1 = int(request.POST.get('number1'))
+    number2 = int(request.POST.get('number2'))
+    plus = number1 + number2
+    minus = number1 - number2
+    d = {
+        'plus': plus,
+        'minus': minus,
+    }
+    return JsonResponse(d)
+# def add_test(request, order_id):
+#     number1 = int(request.POST.get('number1'))
+#     number2 = int(request.POST.get('number2'))
+#     plus = number1 + number2
+#     minus = number1 - number2
+#     d = {
+#         'plus': plus,
+#         'minus': minus,
+#     }
+#     print(request.POST)
+#     order = Order.objects.get(id=order_id)
+#     print(order)
+#     print(request.POST)
+#     return render(request, 'learning_logs/test.html', {'order':JsonResponse(d)})
 
 @login_required
 def delete_city(request, city_id):
@@ -181,5 +201,23 @@ def setPlt(request, city_id):
 
 @login_required
 def make_recipe(request):
+    if request.method != 'POST':
+        context = {}
+        return render(request, 'learning_logs/recipe.html', context)
+    else:
+        food = request.POST.get('food')
+        notemp, df_recipe, recipe_url = get_recipe(recipe_apikey, food)
+        if notemp != False:
+            context = {}
+            return render(request, 'learning_logs/recipe.html', context)
+        else:
+            zip_recipe = zip(df_recipe['recipeTitle'].to_list(),recipe_url,df_recipe['foodImageUrl'].to_list(),
+                        df_recipe['recipeMaterial'].to_list(),df_recipe['recipeCost'].to_list(),
+                        df_recipe['recipeIndication'].to_list())
+            context = {'zip_recipe':zip_recipe}
+            return render(request, 'learning_logs/recipe.html', context)
+
+@login_required
+def recipe_page(request):
     context = {}
     return render(request, 'learning_logs/recipe.html', context)

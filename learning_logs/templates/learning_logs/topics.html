@@ -98,10 +98,10 @@ $(function(){
         </i>Spotify 音楽 Top3
         </h3>
         <h4>
-            {% for title, uri in zipmusic %}
+            {% for title, url in zipmusic %}
             <li>
                 <nobr>
-                <a>曲名『{{ title }}』</a>URL: <a href="{{ uri }}" >{{ uri }}</a>
+                <a>曲名『{{ title }}』</a>URL: <a href="{{ url }}" >{{ url }}</a>
                 </nobr>
             </li>
             {% endfor %}

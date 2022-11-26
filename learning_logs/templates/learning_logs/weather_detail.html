@@ -18,38 +18,17 @@ var lineChartData = {
     datasets : [
         {
             label: "平均気温",
-            fillColor : "rgba(0,0,0,0)", // 線から下端までを塗りつぶす色
-            strokeColor : "rgba(92,220,92,1)", // 折れ線の色
-            pointColor : "rgba(92,220,92,1)",  // ドットの塗りつぶし色
-            pointStrokeColor : "white",        // ドットの枠線色
-            pointHighlightFill : "yellow",     // マウスが載った際のドットの塗りつぶし色
-            pointHighlightStroke : "green",    // マウスが載った際のドットの枠線色
-            data : {{y}}      // 各点の値
+            fillColor : "rgba(0,0,0,0)",
+            strokeColor : "rgba(92,220,92,1)",
+            pointColor : "rgba(92,220,92,1)",
+            pointStrokeColor : "white", 
+            pointHighlightFill : "yellow", 
+            pointHighlightStroke : "green", 
+            data : {{y}}
         },
     ]
-    {% comment %} options: {
-        scales: {                          
-            xAxes: [                         
-                {
-                scaleLabel: {                
-                    display: true,           
-                    labelString: '時間後',    
-                    fontColor: "red",             
-                    fontSize: 16                  
-                },
-            }],
-            yAxes: [                        
-                {
-                scaleLabel: {                  
-                    display: true,                 
-                    labelString: '平均気温',     
-                    fontSize: 16                   
-                },
-            }]
-        }
-    }{% endcomment %}
 }
-// ▼上記のグラフを描画するための記述
+
 window.onload = function(){
     var ctx = document.getElementById("graph-area").getContext("2d");
     window.myLine = new Chart(ctx).Line(lineChartData);
