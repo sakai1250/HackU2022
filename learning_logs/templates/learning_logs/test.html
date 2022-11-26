@@ -7,7 +7,7 @@
 <body>
     <div class="container">
         <h2>数値の入力</h2>
-        <form id="ajax-number" action="{% url 'learning_logs:ajax_number' %}" method="POST">
+        <form id="ajax-number" action="{% url 'learning_logs:add_test' %}" method="POST">
             {% csrf_token %}
             <input type="number" id="number1" required>
             <input type="number" id="number2" required>
@@ -56,7 +56,7 @@
         e.preventDefault();
 
         $.ajax({
-            'url': '{% url "learning_logs:ajax_number" %}',
+            'url': '{% url "learning_logs:add_test" %}',
             'type': 'POST',
             'data': {
                 'number1': $('#number1').val(),

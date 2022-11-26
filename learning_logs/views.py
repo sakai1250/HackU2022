@@ -121,7 +121,7 @@ def test(request):
     return render(request, 'learning_logs/test.html')
 
 @login_required
-def ajax_number(request):
+def add_test(request):
     number1 = int(request.POST.get('number1'))
     number2 = int(request.POST.get('number2'))
     plus = number1 + number2
