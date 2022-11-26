@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, TextInput
-from .models import Topic, Entry, City
+from .models import Topic, Entry, City, Order
 
 class TopicForm(forms.ModelForm):
     class Meta:
@@ -20,3 +20,10 @@ class CityForm(forms.ModelForm):
         model = City
         fields = ['name']
         widgets = {'name': TextInput(attrs={'class' : 'input', 'placeholder' : 'City Name'}),} 
+        
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model   = Order
+        fields  = [ "order" ]
+        labels = {'order':''}

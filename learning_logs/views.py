@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Topic, Entry, City
+from .models import Topic, Entry, City, Order
 from .forms import TopicForm,EntryForm,CityForm
 from django.http import Http404
 import requests, json
@@ -117,6 +117,14 @@ def edit_entry(request, entry_id):
 @login_required
 def test(request):
     return render(request, 'learning_logs/test.html')
+
+@login_required
+def add_test(request, order_id):
+    print(request.POST)
+    order = Order.objects.get(id=order_id)
+    print(order)
+    print(request.POST)
+    return render(request, 'learning_logs/test.html', {'order':order})
 
 @login_required
 def delete_city(request, city_id):

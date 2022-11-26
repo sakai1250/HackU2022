@@ -26,7 +26,6 @@ def get_spotify_ranking(client_id, client_secret):
         uri[u] = 'https://open.spotify.com/track/' + uri[u]
     del title[:3]
     del uri[:3]
-    print(uri)
     return title, uri
 
 

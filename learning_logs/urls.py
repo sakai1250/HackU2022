@@ -18,6 +18,8 @@ urlpatterns = [
     
     path('test/',views.test, name='test'),
     
+    path('add_test/<order_id>',views.test, name='test'),   
+    
     path('weather/',views.weather, name='weather'),
     
     path('delete_city/<city_id>/',views.delete_city, name='delete_city'),
