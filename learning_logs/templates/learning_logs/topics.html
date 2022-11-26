@@ -9,7 +9,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 
-<script type="text/javascript">
+<script type="text/javascript">// 自由移動用
 function put_result(){
     $("#result_box").empty();
 	var id_order =[];
@@ -23,13 +23,64 @@ function put_result(){
 $(function(){
 	put_result();
 	$("#sortable").sortable({
-		axis: "y", // ドラッグの方向を縦に固定
-		"opacity": 0.5, // ドラッグ中の透明度
-		"update": function(event,ui){ // ドラッグ完了後のコールバック
+		axis: "y", 
+		"opacity": 0.5,
+		"update": function(event,ui){ 
 			put_result();
 		}
 	});
 
+});
+// ここからajax
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+// ここまでajax
+
+$('#ajax-number').on('submit', function(e) {
+    e.preventDefault();
+
+    $.ajax({
+        'url': '{% url "learning_logs:add_test" %}',
+        'type': 'POST',
+        'data': {
+            'number1': $('#number1').val(),
+            'number2': $('#number2').val(),
+            'id_order': put_result(),
+        },
+        'dataType': 'json'
+    })
+    .done(function(response){
+        $('.result').prepend('<p>引き算結果：' + response.minus + '</p>');
+        $('.result').prepend('<p>足し算結果：' + response.plus + '</p>');
+    });
 });
 </script>
 
