@@ -2,10 +2,9 @@
 {% block content %}
 <html>
 <head>
-<!-- jQuery 3.1.0 -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
-<!-- jQuery UI 1.12.1 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 
@@ -108,6 +107,16 @@ $('#ajax-number').on('submit', function(e) {
     {% empty %}
     <h3>To Doはまだ作成されていません。</h3>
     {% endfor %}
+<div class="container">
+    <form id="ajax-number" action="{% url 'learning_logs:add_test' %}" method="POST">
+        {% csrf_token %}
+        <input type="number" id="number1" required>
+        <input type="number" id="number2" required>
+        <button type="submit" >計算</button>
+    </form>
+    <div class="result">
+    </div>
+</div>
 <h3><a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic' %}" role="button">新規To Doを追加 &raquo;</a></h3>
 <body>
 <div class="card mt-5">
@@ -145,16 +154,18 @@ $('#ajax-number').on('submit', function(e) {
     </div>
 
     <div class="jumbotron" id="d">
-        <h3><i class="handle fas fa-arrows-alt-v">
-        </i>Spotify 音楽 Top3
-        </h3>
+        <h1><i class="handle fas fa-arrows-alt-v">
+        </i>Spotify 音楽 週間Top3
+        </h1>
         <h4>
-            {% for title, url in zipmusic %}
-            <li>
-                <nobr>
-                <a>曲名『{{ title }}』</a>URL: <a href="{{ url }}" >{{ url }}</a>
-                </nobr>
-            </li>
+            {% for artist, title, url in zipmusic %}
+        <ol>
+            <nobr>
+                <li>
+                    <font size="5"><a>{{ artist }}</a>　<a href="{{ url }}" >『{{ title }}』</a></font><font size="4">クリックでSpotifyに移動</font>
+                </li>
+            </nobr>
+        </ol>
             {% endfor %}
         </h4>
     </div>

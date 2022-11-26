@@ -17,15 +17,17 @@ def get_spotify_ranking(client_id, client_secret):
     for i, track in enumerate(tracks):
         idx = (3) + i
         track_info = track['track']
+        tracks_df.loc[idx, 'artist'] = track_info['artists'][0]['name']
         tracks_df.loc[idx, 'title'] = track_info['name']
         tracks_df.loc[idx, 'uri'] = track_info['uri'].replace('spotify:track:', '')
-
+    artist = tracks_df['artist'].to_list()
     title = tracks_df['title'].to_list()
     uri = tracks_df['uri'].to_list()
     for u in range(3,6):
         uri[u] = 'https://open.spotify.com/track/' + uri[u]
+    del artist[:3]
     del title[:3]
     del uri[:3]
-    return title, uri
+    return artist, title, uri
 
 

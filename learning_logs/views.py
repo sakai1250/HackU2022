@@ -26,8 +26,8 @@ def topics(request):
     # spotify
     title = []
     uri = []
-    title, uri = get_spotify_ranking(client_id, client_secret)
-    zipmusic = zip(title, uri)
+    artist, title, uri = get_spotify_ranking(client_id, client_secret)
+    zipmusic = zip(artist, title, uri)
     
     if not cities:
         context = {'topics':topics, 'zipmusic':zipmusic}
@@ -124,11 +124,14 @@ def test(request):
 def add_test(request):
     number1 = int(request.POST.get('number1'))
     number2 = int(request.POST.get('number2'))
+    id_order = request.POST.get('id_order')
+    print(id_order)
     plus = number1 + number2
     minus = number1 - number2
     d = {
         'plus': plus,
         'minus': minus,
+        'id_order':id_order
     }
     return JsonResponse(d)
 # def add_test(request, order_id):
