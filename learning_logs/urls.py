@@ -16,10 +16,11 @@ urlpatterns = [
     # 記事の編集ページ
     path('edit_entry/<int:entry_id>/',views.edit_entry, name='edit_entry'),
     
-    path('test/',views.test, name='test'),
+    # path('test/',views.test, name='test'),
     
-    path('add_test/', views.add_test, name='add_test'),
-    # path('add_test/<order_id>',views.add_test, name='add_test'),   
+    # path('save_order/', views.save_order, name='save_order'),
+    
+    # path('load_order/', views.load_order, name='load_order'),
     
     path('weather/',views.weather, name='weather'),
     

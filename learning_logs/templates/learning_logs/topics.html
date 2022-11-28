@@ -2,11 +2,24 @@
 {% block content %}
 <html>
 <head>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+{% comment %} <div class="container">
+    <div class="card mt-5">
+        <div id="result_box" class="card-body">
+        </div>
+    </div>
+    <form id="ajax-order" action="{% url 'learning_logs:save_order'%}" method="POST">
+        {% csrf_token %}
+        <input type="number" id="number1" required>
+        <input type="number" id="number2" required>
+        <button type="submit" >保存</button>
+    </form>
+    <div class="result">
+    </div>
+</div> {% endcomment %}
 
 <script type="text/javascript">// 自由移動用
 function put_result(){
@@ -30,6 +43,7 @@ $(function(){
 	});
 
 });
+/*
 // ここからajax
 function getCookie(name) {
     var cookieValue = null;
@@ -63,24 +77,29 @@ $.ajaxSetup({
 });
 // ここまでajax
 
-$('#ajax-number').on('submit', function(e) {
+$('#ajax-order').on('submit', function(e) {
     e.preventDefault();
-
+    $('.result').empty();
+    id_order = put_result();
     $.ajax({
-        'url': '{% url "learning_logs:add_test" %}',
+        'url': '{% url "learning_logs:topics"%}',
         'type': 'POST',
+        "dataType": "text",
         'data': {
             'number1': $('#number1').val(),
             'number2': $('#number2').val(),
-            'id_order': put_result(),
+            'id_order': id_order,
         },
-        'dataType': 'json'
     })
     .done(function(response){
-        $('.result').prepend('<p>引き算結果：' + response.minus + '</p>');
-        $('.result').prepend('<p>足し算結果：' + response.plus + '</p>');
+        var array = [];
+        $('.result').prepend(response+"<br />");
+        for(var i =10; i < 15; i++){
+            array.push(response[i]);
+        }
+        $('.result').prepend('保存完了'+ array[3] + array.indexOf('b'));
     });
-});
+});*/
 </script>
 
 <style>
@@ -107,22 +126,9 @@ $('#ajax-number').on('submit', function(e) {
     {% empty %}
     <h3>To Doはまだ作成されていません。</h3>
     {% endfor %}
-<div class="container">
-    <form id="ajax-number" action="{% url 'learning_logs:add_test' %}" method="POST">
-        {% csrf_token %}
-        <input type="number" id="number1" required>
-        <input type="number" id="number2" required>
-        <button type="submit" >計算</button>
-    </form>
-    <div class="result">
-    </div>
-</div>
 <h3><a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic' %}" role="button">新規To Doを追加 &raquo;</a></h3>
 <body>
-<div class="card mt-5">
-    <div id="result_box" class="card-body">
-    </div>
-</div>
+
 <div id="sortable">
     <div class="jumbotron" id="a">
         <h3 class="display-4">
@@ -136,21 +142,13 @@ $('#ajax-number').on('submit', function(e) {
         <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:weather' %}" role="button">詳細 &raquo;</a>
     </div>
 
-    <div class="jumbotron" id="b">
-        <h3 class="display-4">
-            <i class="handle fas fa-arrows-alt-v">
-            </i>病気・ケガ
-        </h3>
-        <a class="btn btn-lg btn-primary" href="{% url 'users:register' %}" role="button">診断 &raquo;</a>
-    </div>
-
     <div class="jumbotron" id="c">
         <h3 class="display-4">
             <i class="handle fas fa-arrows-alt-v">
             </i>To Do
         </h3>
-        <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic' %}" role="button">追加 &raquo;</a>
-        <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:test' %}" role="button">テスト（本番時に削除する） &raquo;</a>
+        <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic'%}" role="button">追加 &raquo;</a>
+        {% comment %} <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:test' %}" role="button">テスト（本番時に削除する） &raquo;</a> {% endcomment %}
     </div>
 
     <div class="jumbotron" id="d">
@@ -176,6 +174,14 @@ $('#ajax-number').on('submit', function(e) {
             </i>レシピ作成
         </h3>
         <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:make_recipe' %}" role="button">食材を入力 &raquo;</a>
+    </div>
+    
+    <div class="jumbotron" id="b">
+        <h3 class="display-4">
+            <i class="handle fas fa-arrows-alt-v">
+            </i>病気・ケガ
+        </h3>
+        <a class="btn btn-lg btn-primary" href="{% url 'users:register' %}" role="button">診断 &raquo;</a>
     </div>
 
 </div>

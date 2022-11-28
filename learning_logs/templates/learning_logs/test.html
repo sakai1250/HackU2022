@@ -1,75 +1,140 @@
 {% extends 'learning_logs/base.html' %}
 {% block content %}
-<html lang="ja">
+<html>
 <head>
-<title>Ajax</title>
-</head>
-<body>
-    <div class="container">
-        <h2>数値の入力</h2>
-        <form id="ajax-number" action="{% url 'learning_logs:add_test' %}" method="POST">
-            {% csrf_token %}
-            <input type="number" id="number1" required>
-            <input type="number" id="number2" required>
-            <button type="submit" >計算</button>
-        </form>
-
-        <h2>数値の計算</h2>
-        <div class="result">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+{% comment %} <div class="container">
+    <div class="card mt-5">
+        <div id="result_box" class="card-body">
         </div>
     </div>
+    <form id="ajax-order" action="{% url 'learning_logs:save_order'%}" method="POST">
+        {% csrf_token %}
+        <button type="submit" >保存</button>
+    </form>
+    <div class="result">
+    </div>
+</div> {% endcomment %}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+<script type="text/javascript">
+/*function put_result(){  // 自由移動用
+    $("#result_box").empty();
+	var id_order =[];
+	$("#sortable").find(".jumbotron").each(function(index, element){
+        id_order.push($(this).attr("id"));
+	});
+    $("#result_box").append(id_order+"<br />");
+    return id_order;
+}
+
+$(function(){
+	put_result();
+	$("#sortable").sortable({
+		axis: "y", 
+		"opacity": 0.5,
+		"update": function(event,ui){ 
+			put_result();
+		}
+	});
+
+});
+// ここからajax
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-        return cookieValue;
     }
+    return cookieValue;
+}
 
-    var csrftoken = getCookie('csrftoken');
+var csrftoken = getCookie('csrftoken');
 
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
     }
-
-    $.ajaxSetup({
-        beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
+});
+// ここまでajax
+$(window).on('unload', function(e){
+    $.ajax({
+        'url': '{% url "learning_logs:load_order" %}',
+        'type': 'GET',
+        "dataType": "text",
+        'data': {
+        },
+    })
+    .done(function(response){
+        var array = [];
+        for(var i =10; i < 15; i++){
+            
         }
     });
+    // (1) ノードリストを取得
+    var myUL = document.getElementById("sortable");
+    var myNodeList = myUL.getElementsByClassName("jumbotron");
+    // (2) 配列を得る
+    var myArray = Array.prototype.slice.call(myNodeList);
+    // (3) 配列をソート
+    for (var i=0; i< myArray.length;i++){
 
-    $('#ajax-number').on('submit', function(e) {
-        e.preventDefault();
-
-        $.ajax({
-            'url': '{% url "learning_logs:add_test" %}',
-            'type': 'POST',
-            'data': {
-                'number1': $('#number1').val(),
-                'number2': $('#number2').val(),
-            },
-            'dataType': 'json'
-        })
-        .done(function(response){
-            $('.result').prepend('<p>引き算結果：' + response.minus + '</p>');
-            $('.result').prepend('<p>足し算結果：' + response.plus + '</p>');
-        });
+    }
+    // (4) 新しい順番を DOM ツリーに反映
+    for (var i = 0; i < myArray.length; i++) {
+        myUL.appendChild(myUL.removeChild(myArray[i]))
+    }
+});
+$('#ajax-order').on('submit', function(e) {
+    e.preventDefault();
+    $('.result').empty();
+    id_order = put_result();    //最新の順番
+    $.ajax({
+        'url': '{% url "learning_logs:save_order" %}',
+        'type': 'POST',
+        "dataType": "text",
+        'data': {
+            'id_order': id_order,
+        },
+    })
+    .done(function(response){
+        var array = [];
+        for(var i =0; i < response.length; i++){
+            $('.result').append(response[i]);
+            array.push(response[i]);
+        }
+        $('.result').append('保存完了'+ array[3] + array.indexOf('b')+"<br />");
     });
+});
+
 </script>
+<ul id="sortable">
+    <div class="jumbotron" id="e">e</div>
+    <div class="jumbotron" id="d">d</div>
+    <div class="jumbotron" id="b">b</div>
+    <div class="jumbotron" id="c">c</div>
+    <div class="jumbotron" id="a">a</div>
+</ul>
+</head>
+
+<body>
 </body>
 </html>
+
 {% endblock content %}

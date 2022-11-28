@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Topic, Entry, City, Order
-from .forms import TopicForm, EntryForm, CityForm
+from .forms import TopicForm, EntryForm, CityForm, OrderForm
 from django.http import Http404, JsonResponse
 from django.conf import settings
 import requests, json
@@ -104,7 +104,7 @@ def edit_entry(request, entry_id):
     if topic.owner != request.user:
         raise Http404    
     if request.method != 'POST':
-        # 初回リクエスト時はがフォームに埋め込まれている
+        # 初回リクエスト時フォームに埋め込まれている
         form = EntryForm(instance=entry)
     else:
         # POSTでデータが送信されたのでこれを処理する
@@ -116,38 +116,40 @@ def edit_entry(request, entry_id):
     context = {'entry':entry, 'topic':topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
 
-@login_required
-def test(request):
-    return render(request, 'learning_logs/test.html')
+# @login_required
+# def test(request):
+    # return render(request, 'learning_logs/test.html')
 
-@login_required
-def add_test(request):
-    number1 = int(request.POST.get('number1'))
-    number2 = int(request.POST.get('number2'))
-    id_order = request.POST.get('id_order')
-    print(id_order)
-    plus = number1 + number2
-    minus = number1 - number2
-    d = {
-        'plus': plus,
-        'minus': minus,
-        'id_order':id_order
-    }
-    return JsonResponse(d)
-# def add_test(request, order_id):
-#     number1 = int(request.POST.get('number1'))
-#     number2 = int(request.POST.get('number2'))
-#     plus = number1 + number2
-#     minus = number1 - number2
-#     d = {
-#         'plus': plus,
-#         'minus': minus,
-#     }
-#     print(request.POST)
-#     order = Order.objects.get(id=order_id)
-#     print(order)
-#     print(request.POST)
-#     return render(request, 'learning_logs/test.html', {'order':JsonResponse(d)})
+# @login_required
+# def save_order(request):
+#     ary = ''
+#     id_order = request.POST.getlist('id_order[]') #最新の順番
+#     if request.method != 'POST': 
+#         form = OrderForm()
+#     else:
+#         form = OrderForm(request.POST)
+#         if form.is_valid():
+#             order = Order.objects.filter(my_order=request.user)
+#             order.delete()
+#             new_order = form.save(commit=False)
+#             new_order.my_order = request.user
+#             new_order.save()
+#         else:
+#             print(id_order)
+#         return redirect('learning_logs:test')
+#     for data in id_order:
+#         ary = ary + data
+#     print({'data':ary})
+#     context = {'data':JsonResponse({'data':ary}),'form': form}
+#     return render(request, 'learning_logs/test.html', context)
+
+# @login_required
+# def load_order(request):
+#     form = OrderForm()
+#     order = Order.objects.all()
+#     print(vars(order))
+#     context = {'data':order,'form': form}
+#     return render(request, 'learning_logs/test.html', context)
 
 @login_required
 def delete_city(request, city_id):
@@ -195,7 +197,7 @@ def setPlt(request, city_id):
     y = []
     for city_num in range(0, 23):
         city_weather = requests.get(url.format(city.name)).json() 
-                
+        
         y.append(city_weather["list"][city_num]["main"]["feels_like"])
         weather_icon.append(city_weather["list"][city_num]["weather"][0]["icon"])
         
