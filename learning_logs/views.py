@@ -46,7 +46,7 @@ def topics(request):
                 'icon' : city_weather['weather'][0]['icon']
             }
             context = {'topics':topics, 'weather':weather, 'zipmusic':zipmusic}
-            return render(request, 'learning_logs/edit_entry.html',context)
+            return render(request, 'learning_logs/topics.html',context)
 
 @login_required
 def topic(request, topic_id):
@@ -120,24 +120,25 @@ def edit_entry(request, entry_id):
 # def test(request):
     # return render(request, 'learning_logs/test.html')
 
-# @login_required
-# def save_order(request, order_id):
-#     order = City.objects.get(pk=order_id)    
-#     if request.method != 'POST':
-#         form = OrderForm()
-#     else:
-#         form = OrderForm(request.POST)
-#         if form.is_valid():
-#             order.delete()
-#             new_order = form.save(commit=False)
-#             new_order.my_order = request.user
-#             new_order.save()
-#             form.save()
-#             print(order)
-#         else:
-#             print(order)
-#         return redirect('learning_logs:topics')
-#     redirect('learning_logs:weather')
+@login_required
+def save_order(request):
+    order = request.POST.get('order')
+    if request.method != 'POST':
+        order = OrderForm()
+    else:
+        order = OrderForm(request.POST)
+        if order.is_valid():
+            order.delete()
+            new_order = order.save(commit=False)
+            new_order.my_order = request.user
+            new_order.save()
+            print(order)
+        else:
+            print(order)
+        return redirect('learning_logs:topics')
+    print(order)
+    return redirect(request, 'learning_logs:topics')
+
 
 
 # @login_required

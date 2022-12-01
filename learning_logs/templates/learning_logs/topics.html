@@ -14,7 +14,6 @@
     <option value="select5">--</option>
 </select>
 
-<button type="submit" >保存</button>
 
 {% comment %} <div class="container">
     <div class="card mt-5">
@@ -31,24 +30,13 @@
     </div>
 </div> {% endcomment %}
 
-<script type="text/javascript">// 自由移動用
-{% comment %} function put_result(){
-    $("#result_box").empty();
-	var id_order =[];
-	$("#sortable").find(".jumbotron").each(function(index, element){
-        id_order.push($(this).attr("id"));
-	});
-    $("#result_box").append(id_order+"<br />");
-    return id_order;
-} {% endcomment %}
+<script type="text/javascript">
 
 $(function(){
-//	put_result();
 	$("#sortable").sortable({
 		axis: "y", 
 		"opacity": 0.5,
 		"update": function(event,ui){ 
-		//	put_result();
 		}
 	});
 
@@ -98,8 +86,8 @@ return id;
 }
 
 // ここからajax
-function getCookie(name) {
-    var cookieValue = null;
+//function getCookie(name) {
+    {% comment %} var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         var cookies = document.cookie.split(';');
         for (var i = 0; i < cookies.length; i++) {
@@ -131,9 +119,8 @@ $.ajaxSetup({
 // ここまでajax
 
 $('#ajax-order').on('submit', function(e) {
-    id = viewChange();
+    id = viewChange;
     e.preventDefault();
-    //$('.result').empty();
     $.ajax({
         'url': '{% url "learning_logs:topics"%}',
         'type': 'POST',
@@ -143,9 +130,8 @@ $('#ajax-order').on('submit', function(e) {
         },
     })
     .done(function(response){
-
     });
-});
+}); {% endcomment %}
 </script>
 
 <style>
