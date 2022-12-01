@@ -6,6 +6,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<select class="form-control" id="sample" onchange="viewChange();">
+    <option value="select1">天気</option>
+    <option value="select2">To do</option>
+    <option value="select3">音楽 週間Top3</option>
+    <option value="select4">レシピ作成</option>
+    <option value="select5">--</option>
+</select>
+
+<button type="submit" >保存</button>
+
 {% comment %} <div class="container">
     <div class="card mt-5">
         <div id="result_box" class="card-body">
@@ -22,7 +32,7 @@
 </div> {% endcomment %}
 
 <script type="text/javascript">// 自由移動用
-function put_result(){
+{% comment %} function put_result(){
     $("#result_box").empty();
 	var id_order =[];
 	$("#sortable").find(".jumbotron").each(function(index, element){
@@ -30,20 +40,63 @@ function put_result(){
 	});
     $("#result_box").append(id_order+"<br />");
     return id_order;
-}
+} {% endcomment %}
 
 $(function(){
-	put_result();
+//	put_result();
 	$("#sortable").sortable({
 		axis: "y", 
 		"opacity": 0.5,
 		"update": function(event,ui){ 
-			put_result();
+		//	put_result();
 		}
 	});
 
 });
-/*
+function viewChange(){
+    if(document.getElementById('sample')){
+        id = document.getElementById('sample').value;
+        if(id == 'select1'){
+            document.getElementById('a').style.display = "";
+            document.getElementById('c').style.display = "none";
+            document.getElementById('d').style.display = "none";
+            document.getElementById('e').style.display = "none";
+
+        }else if(id == 'select2'){
+            document.getElementById('a').style.display = "none";
+            document.getElementById('c').style.display = "";
+            document.getElementById('d').style.display = "none";
+            document.getElementById('e').style.display = "none";
+
+        }
+        else if(id == 'select3'){
+            document.getElementById('a').style.display = "none";
+            document.getElementById('c').style.display = "none";
+            document.getElementById('d').style.display = "";
+            document.getElementById('e').style.display = "none";
+
+        }
+        else if(id == 'select4'){
+            document.getElementById('a').style.display = "none";
+            document.getElementById('c').style.display = "none";
+            document.getElementById('d').style.display = "none";
+            document.getElementById('e').style.display = "";
+
+        }
+        else if(id == 'select5'){
+            document.getElementById('a').style.display = "";
+            document.getElementById('c').style.display = "";
+            document.getElementById('d').style.display = "";
+            document.getElementById('e').style.display = "";
+
+        }
+
+    }
+
+window.onload = viewChange;
+return id;
+}
+
 // ここからajax
 function getCookie(name) {
     var cookieValue = null;
@@ -78,28 +131,21 @@ $.ajaxSetup({
 // ここまでajax
 
 $('#ajax-order').on('submit', function(e) {
+    id = viewChange();
     e.preventDefault();
-    $('.result').empty();
-    id_order = put_result();
+    //$('.result').empty();
     $.ajax({
         'url': '{% url "learning_logs:topics"%}',
         'type': 'POST',
         "dataType": "text",
         'data': {
-            'number1': $('#number1').val(),
-            'number2': $('#number2').val(),
-            'id_order': id_order,
+            'order': id,
         },
     })
     .done(function(response){
-        var array = [];
-        $('.result').prepend(response+"<br />");
-        for(var i =10; i < 15; i++){
-            array.push(response[i]);
-        }
-        $('.result').prepend('保存完了'+ array[3] + array.indexOf('b'));
+
     });
-});*/
+});
 </script>
 
 <style>
@@ -148,19 +194,19 @@ $('#ajax-order').on('submit', function(e) {
             </i>To Do
         </h3>
         <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:new_topic'%}" role="button">追加 &raquo;</a>
-        {% comment %} <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:test' %}" role="button">テスト（本番時に削除する） &raquo;</a> {% endcomment %}
     </div>
 
     <div class="jumbotron" id="d">
         <h1><i class="handle fas fa-arrows-alt-v">
         </i>Spotify 音楽 週間Top3
+    <font size="4">クリックでSpotifyに移動</font>
         </h1>
         <h4>
             {% for artist, title, url in zipmusic %}
         <ol>
             <nobr>
                 <li>
-                    <font size="5"><a>{{ artist }}</a>　<a href="{{ url }}" >『{{ title }}』</a></font><font size="4">クリックでSpotifyに移動</font>
+                    <font size="5"><a>{{ artist }}</a>　<a href="{{ url }}" >『{{ title }}』</a></font>
                 </li>
             </nobr>
         </ol>
@@ -176,13 +222,13 @@ $('#ajax-order').on('submit', function(e) {
         <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:make_recipe' %}" role="button">食材を入力 &raquo;</a>
     </div>
     
-    <div class="jumbotron" id="b">
+    {% comment %} <div class="jumbotron" id="b">
         <h3 class="display-4">
             <i class="handle fas fa-arrows-alt-v">
             </i>病気・ケガ
         </h3>
         <a class="btn btn-lg btn-primary" href="{% url 'users:register' %}" role="button">診断 &raquo;</a>
-    </div>
+    </div> {% endcomment %}
 
 </div>
 </body>

@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django_mysql.models import ListCharField
 
 class Topic(models.Model):
     text = models.CharField(max_length=200)
@@ -33,10 +32,6 @@ class Meta:
 
 class Order(models.Model):
     my_order = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    order = ListCharField(
-        base_field = models.CharField(max_length=4),
-        size=5,
-        max_length=(5 * 5),  
-    )
+    order = models.CharField(max_length=20)
     def __list__(self):
         return self.order

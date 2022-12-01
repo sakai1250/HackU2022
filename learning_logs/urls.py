@@ -18,7 +18,7 @@ urlpatterns = [
     
     # path('test/',views.test, name='test'),
     
-    # path('save_order/', views.save_order, name='save_order'),
+    # path('save_order/<int:order_id>', views.save_order, name='save_order'),
     
     # path('load_order/', views.load_order, name='load_order'),
     

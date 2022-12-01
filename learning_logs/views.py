@@ -46,7 +46,7 @@ def topics(request):
                 'icon' : city_weather['weather'][0]['icon']
             }
             context = {'topics':topics, 'weather':weather, 'zipmusic':zipmusic}
-            return render(request, 'learning_logs/topics.html',context)
+            return render(request, 'learning_logs/edit_entry.html',context)
 
 @login_required
 def topic(request, topic_id):
@@ -121,27 +121,24 @@ def edit_entry(request, entry_id):
     # return render(request, 'learning_logs/test.html')
 
 # @login_required
-# def save_order(request):
-#     ary = ''
-#     id_order = request.POST.getlist('id_order[]') #最新の順番
-#     if request.method != 'POST': 
+# def save_order(request, order_id):
+#     order = City.objects.get(pk=order_id)    
+#     if request.method != 'POST':
 #         form = OrderForm()
 #     else:
 #         form = OrderForm(request.POST)
 #         if form.is_valid():
-#             order = Order.objects.filter(my_order=request.user)
 #             order.delete()
 #             new_order = form.save(commit=False)
 #             new_order.my_order = request.user
 #             new_order.save()
+#             form.save()
+#             print(order)
 #         else:
-#             print(id_order)
-#         return redirect('learning_logs:test')
-#     for data in id_order:
-#         ary = ary + data
-#     print({'data':ary})
-#     context = {'data':JsonResponse({'data':ary}),'form': form}
-#     return render(request, 'learning_logs/test.html', context)
+#             print(order)
+#         return redirect('learning_logs:topics')
+#     redirect('learning_logs:weather')
+
 
 # @login_required
 # def load_order(request):
@@ -149,7 +146,7 @@ def edit_entry(request, entry_id):
 #     order = Order.objects.all()
 #     print(vars(order))
 #     context = {'data':order,'form': form}
-#     return render(request, 'learning_logs/test.html', context)
+#     return render(request, 'learning_logs/topics.html', context)
 
 @login_required
 def delete_city(request, city_id):

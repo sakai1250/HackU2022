@@ -1,8 +1,17 @@
 {% extends 'learning_logs/base.html' %}
 {% block content %}
+
+
+<style>
+    p::before {
+        content: "";
+        background: #ffc778;
+    }
+</style>
 <html>
-<head><h3>キーワードから好きなレシピを、『楽天レシピ』で見つけよう！　https://recipe.rakuten.co.jp/</h3>
-    <h2>食材を入力してみよう　何も入力しないと、ランダムに表示されます</h2>
+<head><p>キーワードから好きなレシピを、『楽天レシピ』で見つけよう！　<a href ='https://recipe.rakuten.co.jp/'>https://recipe.rakuten.co.jp</a></p>
+    <h2>食材を入力してみよう</br></h2></span>
+    何も入力しないと、ランダムに表示されます
 <div class="column is-offset-4 is-4">               
     <form action="{% url 'learning_logs:make_recipe' %}" method="post">
         {% csrf_token %}
@@ -14,9 +23,6 @@
 </div>
 </head>
 <body>
-    {% comment %} <div class="jumbotron">
-        {{ recipe | safe }}
-    </div> {% endcomment %}
     <ul>
         {% for recipeTitle, recipe_url,foodImageUrl,recipeMaterial,recipeCost,recipeIndication in zip_recipe %} 
 
