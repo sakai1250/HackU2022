@@ -24,7 +24,7 @@
 <figure class="image is-50x50">
     <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
 </figure>
-<h3><a href="{% url 'learning_logs:setPlt' weather.city.id %}">3日間の天気を見る（3時間毎）</a>（10秒ほど時間がかかります）</h3>
+<h3><a href="{% url 'learning_logs:setPlt' weather.city.id %}">3日間の天気を見る（3時間毎）</a></h3>
 <a href="{% url 'learning_logs:delete_city' weather.city.id %}" class='btn btn-danger btn-sm'>Delete</a>
 </div>
 {% empty %}

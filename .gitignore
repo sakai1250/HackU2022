@@ -8,3 +8,4 @@ settings_secret.py
 .cache
 .vscode
 .env
+test.html
