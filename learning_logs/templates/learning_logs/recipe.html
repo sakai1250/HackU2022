@@ -17,7 +17,7 @@
         {% csrf_token %}
         <div class="field has-addons">
         <input type="textbox" name="food">
-        <input type="submit" id="button" name="button" value="食材を入力">
+        <input type="submit" id="button" name="button" value="レシピを検索">
         </div>
     </form>
 </div>
@@ -26,7 +26,7 @@
     <ul>
         {% for recipeTitle, recipe_url,foodImageUrl,recipeMaterial,recipeCost,recipeIndication in zip_recipe %} 
 
-            <div class="jumbotron"><a href="{{ recipe_url }}" >『{{recipeTitle}}』</a> <font size="5">←クリックでサイトに移動</font></nobr><div><img src={{foodImageUrl}} width="200" height="200"alt="Image"></div><font size="5">必要なもの</br>{{recipeMaterial}}</br></font> <font size="5">コスト: {{recipeCost}} </br> 所要時間： {{recipeIndication}}</font></div>
+            <div class="jumbotron"><font size="5"><a href="{{ recipe_url }}" >『{{recipeTitle}}』</a></font> <font size="4">←クリックでサイトに移動</font></nobr><div><img src={{foodImageUrl}} width="200" height="200"alt="Image"></div><font size="5">必要なもの</br>{% for Material in recipeMaterial %}<p>{{Material}}</br></p>{% endfor %}</font> <font size="5">コスト: {{recipeCost}} </br> 所要時間： {{recipeIndication}}</font></div>
 
         {% endfor %}
     </ul> 
