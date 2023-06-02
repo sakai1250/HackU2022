@@ -168,7 +168,7 @@ $('#ajax-order').on('submit', function(e) {
             </i>
             <div class="container">
                 <nobr><font size="8">『{{ weather.city }}』</font><font size="5">の現在</font></nobr>
-                {{ weather.description }}<img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image" width="200" height="200">
+                {{ weather.description }}<link rel="icon" href="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image" width="200" height="200">
             </div>
         </h3>
         <a class="btn btn-lg btn-primary" href="{% url 'learning_logs:weather' %}" role="button">詳細 &raquo;</a>
