@@ -1,7 +1,7 @@
 # HackU2022
 
 ## Use site
-click here: https://django-render-rm59.onrender.com/
+click here(may takes a little minutes...): https://django-render-rm59.onrender.com/
 <br>click botton 「登録する」 or 「ログイン」(user: "test", passward: "test2022")
 ## Use local
 ```bash:(terminal)
