@@ -4,7 +4,9 @@
 click here: https://django-render-rm59.onrender.com/
 <br>click botton 「登録する」 or 「ログイン」(user: "test", passward: "test2022")
 ## Use local
+
 ```bash:(terminal)
+$git clone 
 $conda activate "YOUR_ENVIRONMENT_NAME"
 $pip install -r requirements.txt
 $python manage.py runserver
